@@ -1,4 +1,4 @@
-// 3장 앱 빌드 Pipeline — "Pipeline script from SCM" 으로 연결하고 Script Path 에 ch03-jenkins/Jenkinsfile 을 적는다.
+// skala-devops 저장소용: Script Path는 devops-lab/ch03-jenkins/Jenkinsfile.
 // 필요한 것: Jenkins 에 docker CLI(이 폴더의 Dockerfile), credentials 'harbor-login'(ID skala-gj<N>, 반 Harbor 비밀번호. push 할 때만)
 pipeline {
     agent any
@@ -23,18 +23,18 @@ pipeline {
         }
         stage('Test') {
             steps {
-                dir('app') {
+                dir('devops-lab/app') {
                     sh './gradlew test --no-daemon'
                 }
             }
             post {
-                always { junit 'app/build/test-results/test/*.xml' }   // 실패한 test 를 화면에서 본다
+                always { junit 'devops-lab/app/build/test-results/test/*.xml' }   // 실패한 test 를 화면에서 본다
             }
         }
         stage('Image') {
             steps {
                 // Apple Silicon Mac 은 arm64 image 를 만든다. EKS 노드(x86_64)에서 돌리려면 amd64 로 지정한다
-                sh 'docker build --platform linux/amd64 -t $IMAGE:$TAG app'
+                sh 'docker build --platform linux/amd64 -t $IMAGE:$TAG devops-lab/app'
             }
         }
         stage('Push') {
