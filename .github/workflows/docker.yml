@@ -6,7 +6,7 @@ name: app-image
 on:
   push:
     branches: [main]
-    paths: ["app/**", ".github/workflows/docker.yml"]   # 이 파일을 처음 올릴 때도 실행된다
+    paths: ["devops-lab/app/**", ".github/workflows/docker.yml"]   # 이 파일을 처음 올릴 때도 실행된다
   workflow_dispatch:
 
 permissions:
@@ -14,7 +14,7 @@ permissions:
 
 env:
   REGISTRY: harbor.skala-gj.com                                   # https:// 를 붙이지 않는다
-  IMAGE: harbor.skala-gj.com/skala-gj<N>/<ID>-devops-lab-app      # 반 프로젝트 / 개인 ID
+  IMAGE: harbor.skala-gj.com/skala-gj3/g105-devops-lab-app      # 반 프로젝트 / 개인 ID
 
 jobs:
   image:
@@ -32,7 +32,7 @@ jobs:
           password: ${{ secrets.HARBOR_PASSWORD }}
       - uses: docker/build-push-action@v7
         with:
-          context: app
+          context: devops-lab/app
           push: true
           tags: |
             ${{ env.IMAGE }}:${{ steps.vars.outputs.tag }}
